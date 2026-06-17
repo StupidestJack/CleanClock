@@ -26,6 +26,7 @@
             height: 100vh;
             overflow: hidden;
             user-select: none;
+            cursor: pointer; /* 提示使用者這是一個可點擊的區域 */
         }
         #clock {
             font-size: 18vw;
@@ -39,6 +40,7 @@
     <div id="clock">00:00:00</div>
 
     <script>
+        // 1. 時鐘更新邏輯
         function updateClock() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
@@ -48,10 +50,19 @@
             document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
         }
 
-        // 立即執行一次，避免畫面閃爍
         updateClock();
-        // 每秒更新一次
         setInterval(updateClock, 1000);
+
+        // 2. 雙擊切換全螢幕邏輯（無對話框）
+        document.body.addEventListener('dblclick', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {
+                    // 靜默失敗，不跳出任何錯誤對話框
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        });
     </script>
 </body>
 </html>
